@@ -1,1 +1,10 @@
+Slides 64 - 75 in lecture 7 seem useful
+Though they mainly describe triangulating one point, we want dense reconstruction
+https://cs.uwaterloo.ca/~yboykov/Courses/cs484/Lectures/lec07_multi_view_geometry_u.pdf
+
+
+All of lecture 8 is useful, however they make the assumption that the two views are close, and only differ by a tiny shift. 
+https://cs.uwaterloo.ca/~yboykov/Courses/cs484/Lectures/lec08_stereo_u.pdf
+
+One possible idea is that we only take pairs/collections of views that are close in our dataset and apply the techniques to find depth maps for different sides of the object, then combine them somehow (no clue how to combine them)
 
