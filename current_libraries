@@ -8,3 +8,11 @@ https://cs.uwaterloo.ca/~yboykov/Courses/cs484/Lectures/lec08_stereo_u.pdf
 
 One possible idea is that we only take pairs/collections of views that are close in our dataset and apply the techniques to find depth maps for different sides of the object, then combine them somehow (no clue how to combine them)
 
+In terms of code, I'll add my ssd and WindSum functions to the repo (though you guys can replace it with yours i they are more efficient)
+
+I never figured out the epipolar lines assignment so maybe one of you guys should upload the code you think is relevant. 
+
+
+
+
+
