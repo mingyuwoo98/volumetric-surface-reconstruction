@@ -12,7 +12,9 @@ In terms of code, I'll add my ssd and WindSum functions to the repo (though you 
 
 I never figured out the epipolar lines assignment so maybe one of you guys should upload the code you think is relevant. 
 
-
+Also weird for the 
+Stable Structure from Motion for Unordered Image Collections
+doesn't seem to be a dense stereo algorithm, seems to track point by point if you look at the diagrams at the end
 
 
 
