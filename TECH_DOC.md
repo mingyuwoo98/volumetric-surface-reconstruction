@@ -17,4 +17,3 @@ play with robust versions of photo-consistency loss.
   * Research about current library / paper
 * Jack (s362xu) 
   * Construct the Github README, and also the input loader
-
