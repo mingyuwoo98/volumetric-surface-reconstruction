@@ -34,13 +34,16 @@ centered_calibration_matrices = np.zeros((num_images, 3, 3))
 centered_rotation_matrices = np.zeros((num_images, 3, 3))
 centered_translation_vectors = np.zeros((num_images, 3))
 for i in range(num_images):
-    centered_calibration_matrices[i] = center_calibration_inv * (data[i,:9]).reshape(3,3)
-    centered_rotation_matrices[i] = center_rotation_inv * (data[i,9:18]).reshape(3,3)
+    centered_calibration_matrices[i] = center_calibration_inv @ (data[i,:9]).reshape(3,3)
+    centered_rotation_matrices[i] = center_rotation_inv @ (data[i,9:18]).reshape(3,3)
     centered_translation_vectors[i] = data[i,18:] - center_t
 
-print(centered_calibration_matrices[0])
-assert(np.all(centered_calibration_matrices[0] == np.identity(3)))
-assert(np.all(centered_rotation_matrices[0] == np.identity(3)))
-assert(np.all(centered_translation_vectors[0] == np.zeros((1,3))))
+# print(centered_calibration_matrices[0])
+# print(centered_rotation_matrices[0])
+
+# errors in np.lin.alg.inv, so just check that they are close to identity
+assert(np.linalg.norm(centered_calibration_matrices[0] - np.identity(3) < 0.00001))
+assert(np.linalg.norm(centered_rotation_matrices[0] - np.identity(3)) < 0.00001)
+assert(np.linalg.norm(centered_translation_vectors[0] - np.zeros((1,3))) < 0.0001)
 
 
