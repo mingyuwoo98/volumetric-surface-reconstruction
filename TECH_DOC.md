@@ -14,6 +14,8 @@ play with robust versions of photo-consistency loss.
 ## To-Do List
 
 * Mike (mgwoo) & Leon (lclyao) 
-  * Research about current library / paper
+  * Mar 22: Research about current library / paper
+  * Mar 29: Assignment 2 Method + Depth Method feasibility test
 * Jack (s362xu) 
-  * Construct the Github README, and also the input loader
+  * Mar 22: Construct the Github README, and also the input loader
+  * Mar 29: Photoshop actions, mesh algorithm
