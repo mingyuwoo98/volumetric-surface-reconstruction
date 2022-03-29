@@ -12,7 +12,7 @@ class Images(ABC):
     EXTENSION_LIST = [".jpg", ".png", ".JPG", ".PNG"]
 
     @abstractmethod
-    def parse_par(self, file_name, input_validator):
+    def parse_par(self, file_name):
         '''
         Provides a method to par the camera matrix
         '''

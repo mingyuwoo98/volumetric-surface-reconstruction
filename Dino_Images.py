@@ -13,8 +13,12 @@ Object for storing image data for dino files
     :attr image_list: The list of images in ndarray
     :attr dic_path: The path to folder of the data
     :attr image_path: The path to all images under dic_path
-    :attr camera_matrix: 2darray which stores (K, R, T matrix) where
-        camera_matrix[n] is the nth camera matrix (In flatten form)
+    :attr K_Matrix: Camera calibra matrix in 3darray where K_Matrix[n] 
+        is a 3x3 matrix corrolated to the nth images
+    :attr R_Matrix: Camera rotation matrix in 3darray where R_Matrix[n] 
+        is a 3x3 matrix corrolated to the nth images
+    :attr T_Matrix: Camera translation matrix in 3darray where T_Matrix[n] 
+        is a 3x1 vector corrolated to the nth images
 '''
 
 class Dino_Images(Images):
@@ -34,8 +38,9 @@ class Dino_Images(Images):
         self.dic_path = input_dic_path
 
         # Read dino camera info
-        self.num_images, self.image_path, self.camera_matrix = \
-            self.parse_par("/dinoSR_par.txt", self.input_validation_dino_sparse)
+        self.num_images, self.image_path, \
+            self.K_matrix, self.R_Matrix, self.T_Matrix = \
+            self.parse_par("/dinoSR_par.txt")
 
         # Read dino images
         self.image_list = self.parse_images()
@@ -48,10 +53,10 @@ class Dino_Images(Images):
         Output: 
             num_images: Number of images included in this dataset
             image_path: The local path to images
-            camera_matrix: The data matrix correlated to the dataset (K, R, T matrix)
+            K_Matrix, R_Matrix, T_Matrix: The data matrix correlated to the dataset 
     '''
 
-    def parse_par(self, file_name, input_validator):
+    def parse_par(self, file_name):
 
         f = open(self.dic_path + file_name, 'r')
         num_images = int(f.readline())
@@ -73,40 +78,7 @@ class Dino_Images(Images):
         # 9 parameters for rotation,
         # 3 parameters for translation
         # total of 21 parameters
-        input_validator(num_images, np.array(data_array))
-
-        return num_images, image_path, np.array(data_array)
-
-    '''
-    Parse file format from dinosaur
-        Output: 
-            image_list: The list of images in ndarray
-    '''
-
-    def parse_images(self):
-
-        # Read image
-        image_list = []
-        for f in self.image_path:
-            path = self.dic_path + "/" + f
-            if os.path.splitext(path)[1] in self.EXTENSION_LIST:
-                image_list.append(image.imread(path))
-
-        # Make sure it aligns
-        assert len(image_list) == self.num_images
-
-        return image_list
-
-    '''
-    Validate file format from dinosaur dataset
-        Input: 
-            num_images: Number of images included in this dataset
-            camera_matrix: The data matrix correlated to the dataset (K, R, T matrix)
-        Output: 
-            Error if failed to validate dino dataset
-    '''
-
-    def input_validation_dino_sparse(self, num_images, camera_matrix):
+        camera_matrix = np.array(data_array)
 
         # FOR DINO SPARSE SET
         assert (camera_matrix.shape == (16, 21))
@@ -140,3 +112,28 @@ class Dino_Images(Images):
             centered_rotation_matrices[0] - np.identity(3)) < 0.00001)
         assert (np.linalg.norm(
             centered_translation_vectors[0] - np.zeros((1, 3))) < 0.0001)
+
+        return num_images, image_path, \
+               centered_calibration_matrices, centered_rotation_matrices, centered_translation_vectors
+
+    '''
+    Parse file format from dinosaur
+        Output: 
+            image_list: The list of images in ndarray
+    '''
+
+    def parse_images(self):
+
+        # Read image
+        image_list = []
+        for f in self.image_path:
+            path = self.dic_path + "/" + f
+            if os.path.splitext(path)[1] in self.EXTENSION_LIST:
+                image_list.append(image.imread(path))
+
+        # Make sure it aligns
+        assert len(image_list) == self.num_images
+
+        return image_list
+
+
