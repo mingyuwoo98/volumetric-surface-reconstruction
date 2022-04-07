@@ -11,3 +11,4 @@ You can use automatic segmentation or semi-supervised segmentation (e.g. interac
 free to use smaller subsets of the data collections. Keep in mind that larger
 distances between cameras make photoconsistency less reliable, you may want to
 play with robust versions of photo-consistency loss.
+
