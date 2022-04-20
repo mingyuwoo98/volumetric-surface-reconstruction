@@ -39,7 +39,7 @@ class Dino_Images(Images):
 
         # Read dino camera info
         self.num_images, self.image_path, \
-            self.K_matrix, self.R_Matrix, self.T_Matrix = \
+            self.K_Matrix, self.R_Matrix, self.T_Matrix = \
             self.parse_par("/dinoSR_par.txt")
 
         # Read dino images
