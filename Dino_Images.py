@@ -111,7 +111,10 @@ class Dino_Images(Images):
             image_list: The list of images in ndarray
     '''
     def find_sequence(self, rotations, translations):
-
+        '''
+            Naive method to find the sequence of cameras views we will use to reconstruct the object. The first camera will be
+            the one at index 0, and every subsequent camera will be the one closest in position to the last camera in the current order
+        '''
         # assuming len(rotations) == len(translations)
         remaining = [i for i in range(1, len(rotations))]
 
@@ -124,6 +127,8 @@ class Dino_Images(Images):
 
             closest_index = remaining[0]
             diff = np.sum(np.square(curr_translation - translations[closest_index]))
+            
+            # iterate over remaining cameras and miminize difference in position 
             for j in range(1, len(remaining)):
                 test_index = remaining[j]
                 test_translation = translations[test_index]
