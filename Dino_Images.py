@@ -22,8 +22,6 @@ Object for storing image data for dino files
 '''
 
 class Dino_Images(Images):
-
-
     def __init__(self, input_dic_path="dinoSparseRing"):
 
         # Check user input
@@ -44,6 +42,8 @@ class Dino_Images(Images):
 
         # Read dino images
         self.image_list = self.parse_images()
+
+        self.sequential_image_order = self.find_sequence(self.R_Matrix, self.T_Matrix)
 
     '''
     Parse file format from dinosaur
@@ -74,27 +74,11 @@ class Dino_Images(Images):
         data_array = [list(map(float, data_array_str[i])) for i in
                       range(len(data_array_str))]
 
-        # 16 images, 9 parameters for calibration,
+        # 9 parameters for calibration,
         # 9 parameters for rotation,
         # 3 parameters for translation
         # total of 21 parameters
         camera_matrix = np.array(data_array)
-
-        # FOR DINO SPARSE SET
-#         assert (camera_matrix.shape == (16, 21))
-
-        # CHECK IF THIS IS THE RIGHT FLATTENING
-#         center_calibration_inv = np.linalg.inv(
-#             camera_matrix[0, :9].reshape(3, 3))
-
-#         # CHECK IF THIS IS THE RIGHT FLATTENING
-#         center_rotation_inv = np.linalg.inv(
-#             camera_matrix[0, 9:18].reshape(3, 3))
-
-#         center_t = camera_matrix[0, 18:]
-#         centered_calibration_matrices = np.zeros((num_images, 3, 3))
-#         centered_rotation_matrices = np.zeros((num_images, 3, 3))
-#         centered_translation_vectors = np.zeros((num_images, 3))
 
         calibration_matrices = np.zeros((num_images, 3, 3))
         rotation_matrices = np.zeros((num_images, 3, 3))
@@ -103,9 +87,7 @@ class Dino_Images(Images):
             calibration_matrices[i] = camera_matrix[i, :9].reshape(3, 3)
             rotation_matrices[i] = camera_matrix[i, 9:18].reshape(3, 3)
             translation_vectors[i] = camera_matrix[i, 18:]
-            
-#         return num_images, image_path, \
-#                centered_calibration_matrices, centered_rotation_matrices, centered_translation_vectors
+        
         return num_images, image_path, \
            calibration_matrices, rotation_matrices, translation_vectors
 
@@ -114,6 +96,34 @@ class Dino_Images(Images):
         Output: 
             image_list: The list of images in ndarray
     '''
+    def find_sequence(self, rotations, translations):
+        # assuming len(rotations) == len(translations)
+        remaining = [i for i in range(1, len(rotations))]
+        
+        current_order = [0]
+        
+        # super slow method, prob betters
+        while len(remaining) > 0:
+    #         print(remaining)
+            curr_index = current_order[-1]
+            curr_translation = translations[curr_index]
+            
+            closest_index = remaining[0]
+            diff = np.sum(np.square(curr_translation - translations[closest_index]))
+            for j in range(1, len(remaining)):
+                test_index = remaining[j]
+                
+    #             test_rotation = rotations[test_index]
+                test_translation = translations[test_index]
+                test_diff = np.sum(np.square(test_translation - curr_translation))
+                if test_diff < diff:
+                    closest_index = test_index
+                    diff = test_diff
+            remaining.remove(closest_index)
+            current_order.append(closest_index)
+        return current_order
+        
+
 
     def parse_images(self):
 
