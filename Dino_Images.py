@@ -1,6 +1,17 @@
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.image as image
+import matplotlib.pyplot as plt
+import numpy as np
+import cv2
+from skimage import feature, img_as_ubyte
+from skimage.measure import ransac
+from skimage.transform import warp, ProjectiveTransform, PolynomialTransform, rotate
+from skimage.color import rgb2gray
+from skimage.feature import corner_harris, corner_peaks, plot_matches, BRIEF, match_descriptors
+from sklearn.cluster import KMeans
+from tslearn.clustering import KernelKMeans
+import alphashape
+import warnings
+
 import os
 import warnings
 import math
@@ -14,16 +25,16 @@ Object for storing image data for dino files
     :attr dic_path: The path to folder of the data
     :attr image_path: The path to all images under dic_path
     :attr K_Matrix: Camera calibra matrix in 3darray where K_Matrix[n] 
-        is a 3x3 matrix corrolated to the nth images
+        is a 3x3 matrix correlated to the nth images
     :attr R_Matrix: Camera rotation matrix in 3darray where R_Matrix[n] 
-        is a 3x3 matrix corrolated to the nth images
+        is a 3x3 matrix correlated to the nth images
     :attr T_Matrix: Camera translation matrix in 3darray where T_Matrix[n] 
-        is a 3x1 vector corrolated to the nth images
+        is a 3x1 vector correlated to the nth images
+    :attr params: The Camera matrix in a dictionary (blame on Mike)
 '''
-
 class Dino_Images(Images):
-    
-    def __init__(self, input_dic_path="dinoSparseRing"):
+
+    def __init__(self, input_dic_path="dinoSparseRing", par_path = "/dinoSR_par.txt"):
 
         # Check user input
         assert os.path.isdir(input_dic_path) and not os.path.isfile(
@@ -36,16 +47,13 @@ class Dino_Images(Images):
         # Record path to data dic
         self.dic_path = input_dic_path
 
-#         # Read dino camera info
-#         self.num_images, self.image_path, \
-#             self.K_Matrix, self.R_Matrix, self.T_Matrix = \
-#             self.parse_par("/dinoSR_par.txt")
+        self.num_images, self.image_path, self.K_Matrix, self.R_Matrix, \
+        self.T_Matrix, self.params = self.parse_par(par_path)
 
-        self.num_images, self.image_path, self.K_Matrix, self.R_Matrix, self.T_Matrix, self.params = self.parse_par("/dinoSR_par.txt")
         # Read dino images
         self.image_list = self.parse_images()
         self.sequential_image_order = self.find_sequence(self.R_Matrix, self.T_Matrix)
-        
+
     '''
     Parse file format from dinosaur
         Input: 
@@ -56,7 +64,6 @@ class Dino_Images(Images):
             image_path: The local path to images
             K_Matrix, R_Matrix, T_Matrix: The data matrix correlated to the dataset 
     '''
-
     def parse_par(self, file_name):
 
         f = open(self.dic_path + file_name, 'r')
@@ -84,38 +91,37 @@ class Dino_Images(Images):
         calibration_matrices = np.zeros((num_images, 3, 3))
         rotation_matrices = np.zeros((num_images, 3, 3))
         translation_vectors = np.zeros((num_images, 3))
-        
+
         param_dict = {}
         for i in range(num_images):
-            
+
             K = camera_matrix[i, :9].reshape(3,3)
             R = camera_matrix[i, 9:18].reshape(3,3)
-            T = camera_matrix[i, 18:].reshape(3,1)            
+            T = camera_matrix[i, 18:].reshape(3,1)
             param_dict[i] = [K, R, T]
             calibration_matrices[i] = camera_matrix[i, :9].reshape(3, 3)
             rotation_matrices[i] = camera_matrix[i, 9:18].reshape(3, 3)
             translation_vectors[i] = camera_matrix[i, 18:]
-        
-#         return num_images, image_path, \
-#            calibration_matrices, rotation_matrices, translation_vectors
+
         return num_images, image_path, calibration_matrices, rotation_matrices, translation_vectors, param_dict
+
     '''
     Parse file format from dinosaur
         Output: 
             image_list: The list of images in ndarray
     '''
     def find_sequence(self, rotations, translations):
+
         # assuming len(rotations) == len(translations)
         remaining = [i for i in range(1, len(rotations))]
-        
+
         current_order = [0]
-        
+
         # super slow method, prob betters
         while len(remaining) > 0:
-    #         print(remaining)
             curr_index = current_order[-1]
             curr_translation = translations[curr_index]
-            
+
             closest_index = remaining[0]
             diff = np.sum(np.square(curr_translation - translations[closest_index]))
             for j in range(1, len(remaining)):
@@ -128,9 +134,12 @@ class Dino_Images(Images):
             remaining.remove(closest_index)
             current_order.append(closest_index)
         return current_order
-        
 
-
+    '''
+    Parse file format from dinosaur
+        Output: 
+            image_list: A list of ordering of how the pair wise comparisons are done
+    '''
     def parse_images(self):
 
         # Read image
