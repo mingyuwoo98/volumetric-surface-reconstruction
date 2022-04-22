@@ -22,6 +22,7 @@ Object for storing image data for dino files
 '''
 
 class Dino_Images(Images):
+    
     def __init__(self, input_dic_path="dinoSparseRing"):
 
         # Check user input
@@ -35,16 +36,16 @@ class Dino_Images(Images):
         # Record path to data dic
         self.dic_path = input_dic_path
 
-        # Read dino camera info
-        self.num_images, self.image_path, \
-            self.K_Matrix, self.R_Matrix, self.T_Matrix = \
-            self.parse_par("/dinoSR_par.txt")
+#         # Read dino camera info
+#         self.num_images, self.image_path, \
+#             self.K_Matrix, self.R_Matrix, self.T_Matrix = \
+#             self.parse_par("/dinoSR_par.txt")
 
+        self.num_images, self.image_path, self.K_Matrix, self.R_Matrix, self.T_Matrix, self.params = self.parse_par("/dinoSR_par.txt")
         # Read dino images
         self.image_list = self.parse_images()
-
         self.sequential_image_order = self.find_sequence(self.R_Matrix, self.T_Matrix)
-
+        
     '''
     Parse file format from dinosaur
         Input: 
@@ -83,14 +84,21 @@ class Dino_Images(Images):
         calibration_matrices = np.zeros((num_images, 3, 3))
         rotation_matrices = np.zeros((num_images, 3, 3))
         translation_vectors = np.zeros((num_images, 3))
+        
+        param_dict = {}
         for i in range(num_images):
+            
+            K = camera_matrix[i, :9].reshape(3,3)
+            R = camera_matrix[i, 9:18].reshape(3,3)
+            T = camera_matrix[i, 18:].reshape(3,1)            
+            param_dict[i] = [K, R, T]
             calibration_matrices[i] = camera_matrix[i, :9].reshape(3, 3)
             rotation_matrices[i] = camera_matrix[i, 9:18].reshape(3, 3)
             translation_vectors[i] = camera_matrix[i, 18:]
         
-        return num_images, image_path, \
-           calibration_matrices, rotation_matrices, translation_vectors
-
+#         return num_images, image_path, \
+#            calibration_matrices, rotation_matrices, translation_vectors
+        return num_images, image_path, calibration_matrices, rotation_matrices, translation_vectors, param_dict
     '''
     Parse file format from dinosaur
         Output: 
@@ -112,8 +120,6 @@ class Dino_Images(Images):
             diff = np.sum(np.square(curr_translation - translations[closest_index]))
             for j in range(1, len(remaining)):
                 test_index = remaining[j]
-                
-    #             test_rotation = rotations[test_index]
                 test_translation = translations[test_index]
                 test_diff = np.sum(np.square(test_translation - curr_translation))
                 if test_diff < diff:
