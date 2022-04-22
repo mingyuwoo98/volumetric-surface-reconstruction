@@ -81,40 +81,33 @@ class Dino_Images(Images):
         camera_matrix = np.array(data_array)
 
         # FOR DINO SPARSE SET
-        assert (camera_matrix.shape == (16, 21))
+#         assert (camera_matrix.shape == (16, 21))
 
         # CHECK IF THIS IS THE RIGHT FLATTENING
-        center_calibration_inv = np.linalg.inv(
-            camera_matrix[0, :9].reshape(3, 3))
+#         center_calibration_inv = np.linalg.inv(
+#             camera_matrix[0, :9].reshape(3, 3))
 
-        # CHECK IF THIS IS THE RIGHT FLATTENING
-        center_rotation_inv = np.linalg.inv(
-            camera_matrix[0, 9:18].reshape(3, 3))
+#         # CHECK IF THIS IS THE RIGHT FLATTENING
+#         center_rotation_inv = np.linalg.inv(
+#             camera_matrix[0, 9:18].reshape(3, 3))
 
-        center_t = camera_matrix[0, 18:]
-        centered_calibration_matrices = np.zeros((num_images, 3, 3))
-        centered_rotation_matrices = np.zeros((num_images, 3, 3))
-        centered_translation_vectors = np.zeros((num_images, 3))
+#         center_t = camera_matrix[0, 18:]
+#         centered_calibration_matrices = np.zeros((num_images, 3, 3))
+#         centered_rotation_matrices = np.zeros((num_images, 3, 3))
+#         centered_translation_vectors = np.zeros((num_images, 3))
+
+        calibration_matrices = np.zeros((num_images, 3, 3))
+        rotation_matrices = np.zeros((num_images, 3, 3))
+        translation_vectors = np.zeros((num_images, 3))
         for i in range(num_images):
-            centered_calibration_matrices[i] = center_calibration_inv @ (
-                camera_matrix[i, :9]).reshape(3, 3)
-            centered_rotation_matrices[i] = center_rotation_inv @ (
-                camera_matrix[i, 9:18]).reshape(3, 3)
-            centered_translation_vectors[i] = camera_matrix[i, 18:] - center_t
-
-        # print(centered_calibration_matrices[0])
-        # print(centered_rotation_matrices[0])
-
-        # errors in np.lin.alg.inv, so just check that they are close to identity
-        assert (np.linalg.norm(
-            centered_calibration_matrices[0] - np.identity(3) < 0.00001))
-        assert (np.linalg.norm(
-            centered_rotation_matrices[0] - np.identity(3)) < 0.00001)
-        assert (np.linalg.norm(
-            centered_translation_vectors[0] - np.zeros((1, 3))) < 0.0001)
-
+            calibration_matrices[i] = camera_matrix[i, :9].reshape(3, 3)
+            rotation_matrices[i] = camera_matrix[i, 9:18].reshape(3, 3)
+            translation_vectors[i] = camera_matrix[i, 18:]
+            
+#         return num_images, image_path, \
+#                centered_calibration_matrices, centered_rotation_matrices, centered_translation_vectors
         return num_images, image_path, \
-               centered_calibration_matrices, centered_rotation_matrices, centered_translation_vectors
+           calibration_matrices, rotation_matrices, translation_vectors
 
     '''
     Parse file format from dinosaur
