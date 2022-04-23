@@ -1,4 +1,4 @@
-from triangluation_utils import *
+from mylibs.triangluation_utils import *
 
 # ------------------------ Pair Triangulations  -----------------------------
 

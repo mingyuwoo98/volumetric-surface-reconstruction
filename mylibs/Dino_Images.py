@@ -8,7 +8,6 @@ from skimage.transform import warp, ProjectiveTransform, PolynomialTransform, ro
 from skimage.color import rgb2gray
 from skimage.feature import corner_harris, corner_peaks, plot_matches, BRIEF, match_descriptors
 from sklearn.cluster import KMeans
-from tslearn.clustering import KernelKMeans
 import alphashape
 import warnings
 
@@ -16,7 +15,7 @@ import os
 import warnings
 import math
 
-from Images import Images
+from mylibs.Images import Images
 
 '''
 Object for storing image data for dino files
@@ -127,8 +126,8 @@ class Dino_Images(Images):
             curr_rotation = rotations[curr_index]
             closest_index = remaining[0]
             diff = np.sum(np.square(curr_translation - translations[closest_index])) + np.sum(np.square(curr_rotation - rotations[closest_index]))
-            
-            # iterate over remaining cameras and miminize difference in position 
+
+            # iterate over remaining cameras and miminize difference in position
             for j in range(1, len(remaining)):
                 test_index = remaining[j]
                 test_translation = translations[test_index]
