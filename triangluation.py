@@ -60,7 +60,7 @@ def camera_image_center_pairs(P1, P2):
 def sequential_triangulation(camera_matrix, image_list, camera_order=None,
                              bounding_box_radius = 15, num_feature_points=None,
                              intensity_threshold = 0.4,
-                             penalty_epsilon=0.1, match_threshold=0.9):
+                             penalty_epsilon=0.1, match_threshold=0.9, pkl_name = 'X_C_I_list_final.pkl'):
     X_list = []
     C_list = []
     I_list = []
@@ -117,7 +117,7 @@ def sequential_triangulation(camera_matrix, image_list, camera_order=None,
 
     print('Done')
     # Save parameters
-    with open('X_C_I_list_final.pkl', 'wb') as handle:
+    with open(pkl_name, 'wb') as handle:
         pkl.dump([X_list, C_list, I_list], handle,
                  protocol=pkl.HIGHEST_PROTOCOL)
 

@@ -341,31 +341,33 @@ def get_match_points_linspace(imL, imR, x1, F,
 
 # -------------------------- Plot Triangluation -------------------------------
 
-def plot_all_triangulated(X_list, C_list, I_list, scale=0.05):
+def plot_all_triangulated(X_list, C_list, I_list, scale=0.05, angle_list = [-140, 60]):
     fig = plt.figure()
     ax = plt.axes(projection='3d')
     if C_list == None and I_list == None:
         for i in range(len(X_list)):
 
-            ax.scatter3D(X_list[i][:, 0], X_list[i][:, 1], X_list[i][:, 2])
-            plt.show()
-
+            ax.scatter3D(X_list[i][:, 0], X_list[i][:, 1], X_list[i][:, 2], s = 1)
+        
+        ax.view_init(angle_list[0], angle_list[1])
         ax.set_xlim([-scale, scale])
         ax.set_ylim([-scale, scale])
         ax.set_zlim([-scale, scale])
+        plt.show()
     else:
         for i in range(len(X_list)):
 
-            ax.scatter3D(X_list[i][:, 0], X_list[i][:, 1], X_list[i][:, 2])
+            ax.scatter3D(X_list[i][:, 0], X_list[i][:, 1], X_list[i][:, 2], s = 1)
             ax.scatter3D(C_list[i][:, 0], C_list[i][:, 1], C_list[i][:, 2],
-                         color="r")  # CAMERA CENTER
+                         s = 1, color="r")  # CAMERA CENTER
             ax.scatter3D(I_list[i][:, 0], I_list[i][:, 1], I_list[i][:, 2],
-                         color="g")  # IMAGE CENTER
-            plt.show()
-
+                         s = 1, color="g")  # IMAGE CENTER
+            
+        ax.view_init(angle_list[0], angle_list[1])
         ax.set_xlim([-scale, scale])
         ax.set_ylim([-scale, scale])
         ax.set_zlim([-scale, scale])
+        plt.show()
 
     return None
 
