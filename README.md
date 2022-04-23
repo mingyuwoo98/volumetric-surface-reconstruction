@@ -12,6 +12,36 @@ free to use smaller subsets of the data collections. Keep in mind that larger
 distances between cameras make photoconsistency less reliable, you may want to
 play with robust versions of photo-consistency loss.
 
+## Environment
+
+**Please note that Anaconda is required for environment setup**
+
+Please find the anaconda environment yml file here: [VSR_environment.yml](extlibs/VSR_environment.yml)
+The following command can be used to create the environment with Python 3.8.
+```
+conda env create -f VSR_environment.yml
+```
+The following command activates the project environment. 
+```
+conda activate VSR
+```
+
+The extra package used in the project is as followed:
+```
+- alphashape==1.3.1
+- jupyter-core==4.10.0
+- matplotlib==3.5.1
+- notebook==6.4.11
+- numpy==1.22.3
+- opencv-python==4.5.5.64
+- pickle-mixin==1.0.2
+- pillow==9.1.0
+- scikit-image==0.19.2
+- scikit-learn==1.0.2
+- scipy==1.8.0
+- sklearn==0.0
+```
+
 ## To-Do List
 
 * Mike (mgwoo) & Leon (lclyao) 
