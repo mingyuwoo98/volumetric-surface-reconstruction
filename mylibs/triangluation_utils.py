@@ -2,7 +2,6 @@
 import numpy as np
 import numpy.linalg as la
 import pickle as pkl
-import pandas as pd
 import os
 
 # Plotting
@@ -348,7 +347,7 @@ def plot_all_triangulated(X_list, C_list, I_list, scale=0.05, angle_list = [-140
         for i in range(len(X_list)):
 
             ax.scatter3D(X_list[i][:, 0], X_list[i][:, 1], X_list[i][:, 2], s = 1)
-        
+
         ax.view_init(angle_list[0], angle_list[1])
         ax.set_xlim([-scale, scale])
         ax.set_ylim([-scale, scale])
@@ -362,7 +361,7 @@ def plot_all_triangulated(X_list, C_list, I_list, scale=0.05, angle_list = [-140
                          s = 1, color="r")  # CAMERA CENTER
             ax.scatter3D(I_list[i][:, 0], I_list[i][:, 1], I_list[i][:, 2],
                          s = 1, color="g")  # IMAGE CENTER
-            
+
         ax.view_init(angle_list[0], angle_list[1])
         ax.set_xlim([-scale, scale])
         ax.set_ylim([-scale, scale])
