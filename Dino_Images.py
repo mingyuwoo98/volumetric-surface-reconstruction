@@ -126,7 +126,7 @@ class Dino_Images(Images):
             curr_translation = translations[curr_index]
             curr_rotation = rotations[curr_index]
             closest_index = remaining[0]
-            diff = np.sum(np.square(curr_translation - translations[closest_index])) + np.sum(np.square(test_rotation - rotations[closest_index]))
+            diff = np.sum(np.square(curr_translation - translations[closest_index])) + np.sum(np.square(curr_rotation - rotations[closest_index]))
             
             # iterate over remaining cameras and miminize difference in position 
             for j in range(1, len(remaining)):
