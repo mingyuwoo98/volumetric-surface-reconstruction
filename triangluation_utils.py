@@ -18,6 +18,7 @@ from skimage.color import rgb2gray
 from skimage.measure import ransac
 import cv2
 import sys
+import warnings
 
 # ------------------------- Custom Progress Bar -------------------------------
 

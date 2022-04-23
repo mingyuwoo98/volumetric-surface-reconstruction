@@ -105,7 +105,7 @@ def sequential_triangulation(camera_matrix, image_list, camera_order=None,
         P2 = K2 @ np.hstack([R2, T2])
 
         if (x1_filtered.size == 0) or (x2_filtered.size == 0):
-            print(f"WARNING: no matches are good enough on img {i} with {i+1}")
+            warnings.warn(f"WARNING: no matches are good enough on img {i} with {i+1}")
         else:
             X = triangulation(x1_filtered, x2_filtered, P1, P2)
 
