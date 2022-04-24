@@ -1,4 +1,8 @@
-import numpy as np
+'''
+Author(s): Sijie Xu (s362xu), Leon Yao(lclyao)
+    This file is an abstract class of data loaders
+'''
+
 from abc import ABC, abstractmethod, abstractproperty
 
 

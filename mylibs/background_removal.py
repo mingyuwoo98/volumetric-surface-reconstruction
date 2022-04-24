@@ -1,19 +1,14 @@
-import matplotlib.image as image
-import matplotlib.pyplot as plt
+'''
+Author: Sijie Xu (s362xu)
+'''
+
 import numpy as np
 import cv2
 from skimage import feature, img_as_ubyte
 from skimage.measure import ransac
 from skimage.transform import warp, ProjectiveTransform, PolynomialTransform, rotate
-from skimage.color import rgb2gray
 from skimage.feature import corner_harris, corner_peaks, plot_matches, BRIEF, match_descriptors
 from sklearn.cluster import KMeans
-import alphashape
-import warnings
-
-import os
-import warnings
-import math
 
 def background_remover_naive(img, threshold = 0.4):
 

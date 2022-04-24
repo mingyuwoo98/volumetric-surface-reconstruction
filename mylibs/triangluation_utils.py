@@ -1,23 +1,17 @@
+'''
+Author(s): Min Gyu Woo (mgwoo), Sijie Xu (s362xu)
+'''
+
 # General
 import numpy as np
 import numpy.linalg as la
-import pickle as pkl
-import os
 
 # Plotting
-import matplotlib
-import matplotlib.image as image
 import matplotlib.pyplot as plt
 
 # Image
-from skimage import feature
-from skimage.feature import (corner_harris, corner_peaks, plot_matches, BRIEF, match_descriptors)
-from skimage.transform import warp, FundamentalMatrixTransform, rotate
-from skimage.color import rgb2gray
-from skimage.measure import ransac
 import cv2
 import sys
-import warnings
 
 # ------------------------- Custom Progress Bar -------------------------------
 

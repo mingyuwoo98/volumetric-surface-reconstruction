@@ -1,3 +1,7 @@
+'''
+Author(s): Min Gyu Woo (mgwoo)
+'''
+
 from mylibs.triangluation_utils import *
 
 # ------------------------ Pair Triangulations  -----------------------------

@@ -1,3 +1,8 @@
+'''
+Author(s): Sijie Xu (s362xu), Leon Yao(lclyao)
+    This file handles file loading from dino data
+'''
+
 import matplotlib.image as image
 import matplotlib.pyplot as plt
 import numpy as np

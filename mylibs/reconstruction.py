@@ -1,5 +1,6 @@
-import numpy as np
-import pickle as pkl
+'''
+Author(s): Min Gyu Woo (mgwoo), Sijie Xu (s362xu)
+'''
 
 import matplotlib.pyplot as plt
 from matplotlib.tri import Triangulation

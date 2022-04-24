@@ -1,6 +1,8 @@
+'''
+Author(s): Min Gyu Woo (mgwoo), Sijie Xu (s362xu)
+'''
+
 import numpy as np
-import pickle as pkl
-import matplotlib.pyplot as plt
 
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
