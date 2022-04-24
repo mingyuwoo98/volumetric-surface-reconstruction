@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 # Image
 import cv2
 import sys
+import warnings
+import pickle as pkl
 
 # ------------------------- Custom Progress Bar -------------------------------
 
@@ -129,7 +131,7 @@ def get_right_image_point_cv(imL, imR, impts, x2_on_eline, epsilon,
 
     # used to compute the projection of the point to be matched along the line from the
     # match of the start to the match of the end in the right image
-    if not (matched_start.size == 0 and matched_end.size == 0):
+    if not (matched_start.size == 0 or matched_end.size == 0):
         line = matched_start - matched_end
         l = 1 / np.sum((line) ** 2) * (line)
 
