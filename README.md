@@ -19,7 +19,7 @@ play with robust versions of photo-consistency loss.
 Please find the anaconda environment yml file here: [VSR_environment.yml](extlibs/VSR_environment.yml)
 The following command can be used to create the environment with Python 3.8.
 ```
-conda env create -f VSR_environment.yml
+conda env create -f extlibs/VSR_environment.yml
 ```
 The following command activates the project environment. 
 ```
@@ -29,7 +29,6 @@ conda activate VSR
 The extra package used in the project is as followed:
 ```
 - alphashape==1.3.1
-- jupyter-core==4.10.0
 - matplotlib==3.5.1
 - notebook==6.4.11
 - numpy==1.22.3
@@ -39,7 +38,6 @@ The extra package used in the project is as followed:
 - scikit-image==0.19.2
 - scikit-learn==1.0.2
 - scipy==1.8.0
-- sklearn==0.0
 ```
 
 ## To-Do List
