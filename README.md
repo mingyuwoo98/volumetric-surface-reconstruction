@@ -12,6 +12,8 @@ free to use smaller subsets of the data collections. Keep in mind that larger
 distances between cameras make photoconsistency less reliable, you may want to
 play with robust versions of photo-consistency loss.
 
+Please refer to [our paper](Report.pdf) for more detail
+
 ## Environment
 
 **Please note that Anaconda is required for environment setup**
